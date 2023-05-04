@@ -5,10 +5,10 @@ import { CatalogView } from "./components/CatalogView";
 const initialCartItems = [
   {
     product: {
-      id: 1,
-      name: "Keboard RPC",
-      description: "Lorem de los lorem ..",
-      price: 100,
+      //   id: 1,
+      //   name: "Keboard RPC",
+      //   description: "Lorem de los lorem ..",
+      //   price: 100,
     },
     quantity: 0,
     total: 0,
@@ -19,26 +19,52 @@ export const CartApp = () => {
   const [cartItems, setCartItems] = useState(initialCartItems);
   const handleProductCard = (product) => {
     // console.log(product);
-    setCartItems([
-      ...cartItems,
-      {
-        product,
-        quantity: 1,
-        total: product.price * 1,
-      },
-    ]);
+    const wishedItem = cartItems.find((i) => i.product.id === product.id);
+    if (wishedItem) {
+      //   setCartItems([
+      //     ...cartItems.filter((i) => i.product.id !== product.id),
+      //     {
+      //       product,
+      //       quantity: wishedItem.quantity + 1,
+      //     },
+      //   ]);
+      setCartItems(
+        cartItems.map((i) => {
+          if (i.product.id === product.id) {
+            i.quantity++;
+          }
+          return i;
+        })
+      );
+    } else {
+      setCartItems([
+        ...cartItems,
+        {
+          product,
+          quantity: 1,
+        },
+      ]);
+    }
   };
-  //   console.log(cartItems);
+
+  const handleDeleteProduct = (id) => {
+    setCartItems([...cartItems.filter((i) => i.product.id !== id)]);
+  };
+
   return (
     <>
       <div className="container">
         <h3>Cart App</h3>
+        <CatalogView handlerAdd={handleProductCard} />
 
-        <CatalogView handler={handleProductCard} />
-
-        <div className="my-4 w-50">
-          <CartView cartItems={cartItems} />
-        </div>
+        {cartItems.length <= 0 || (
+          <div className="my-4 w-50">
+            <CartView
+              cartItems={cartItems}
+              handlerDelete={handleDeleteProduct}
+            />
+          </div>
+        )}
       </div>
     </>
   );
