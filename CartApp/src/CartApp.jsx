@@ -1,64 +1,43 @@
-import { useEffect, useState } from "react";
-import { getProducts } from "./services/productService";
+import { useState } from "react";
+import { CartView } from "./components/CartView";
+import { CatalogView } from "./components/CatalogView";
+
+const initialCartItems = [
+  {
+    product: {
+      id: 1,
+      name: "Keboard RPC",
+      description: "Lorem de los lorem ..",
+      price: 100,
+    },
+    quantity: 0,
+    total: 0,
+  },
+];
 
 export const CartApp = () => {
-  const [products, setProducts] = useState([]);
-
-  useEffect(() => {
-    setProducts(getProducts());
-  }, []);
-
+  const [cartItems, setCartItems] = useState(initialCartItems);
+  const handleProductCard = (product) => {
+    // console.log(product);
+    setCartItems([
+      ...cartItems,
+      {
+        product,
+        quantity: 1,
+        total: product.price * 1,
+      },
+    ]);
+  };
+  //   console.log(cartItems);
   return (
     <>
       <div className="container">
         <h3>Cart App</h3>
-        <div className="row">
-          {products.map((prod) => (
-            <div className="col-4 my-2" key={prod.id}>
-              <div className="card">
-                <div className="card-body">
-                  <h5 className="card-title">{prod.name}</h5>
-                  <p className="card-text">{prod.description}</p>
-                  <p className="card-text">$ {prod.price}</p>
-                  <button className="btn btn-primary">Agregar</button>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
+
+        <CatalogView handler={handleProductCard} />
 
         <div className="my-4 w-50">
-          <h3>Carro de compras</h3>
-          <table className="table table-hover table-striped">
-            <thead>
-              <tr>
-                <th>Nombre</th>
-                <th>Precio</th>
-                <th>Cantidad</th>
-                <th>Total</th>
-                <th>Eliminar</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>nombre</td>
-                <td>precio</td>
-                <td>cantidad</td>
-                <td>total</td>
-                <td>eliminar</td>
-              </tr>
-            </tbody>
-            <tfoot>
-              <tr>
-                <td colSpan="3" className="text-end fw-bold">
-                  Total
-                </td>
-                <td colSpan="2" className="text-start fw-bold">
-                  12345
-                </td>
-              </tr>
-            </tfoot>
-          </table>
+          <CartView cartItems={cartItems} />
         </div>
       </div>
     </>

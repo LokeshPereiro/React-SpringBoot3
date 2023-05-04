@@ -1,5 +1,5 @@
-import { products } from "../data/products"
+import { products } from "../data/products";
 
 export const getProducts = () => {
-    return products;
-}
+  return products;
+};

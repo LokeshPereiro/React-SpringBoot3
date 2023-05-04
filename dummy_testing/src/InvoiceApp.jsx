@@ -55,6 +55,7 @@ export const InvoiceApp = () => {
               </tbody>
             </table>
             <TotalView total={total} />
+
             <form className="mt-3">
               <input
                 className="form-control mb-3"
@@ -74,6 +75,9 @@ export const InvoiceApp = () => {
                 name="quantity"
                 placeholder="Cantidad.."
               />
+              <button type="submit" className="btn btn-secondary">
+                Submit
+              </button>
             </form>
           </div>
         </div>
