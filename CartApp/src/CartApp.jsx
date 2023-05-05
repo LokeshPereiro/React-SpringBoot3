@@ -2,24 +2,15 @@ import { useState } from "react";
 import { CartView } from "./components/CartView";
 import { CatalogView } from "./components/CatalogView";
 
-const initialCartItems = [
-  {
-    product: {
-      //   id: 1,
-      //   name: "Keboard RPC",
-      //   description: "Lorem de los lorem ..",
-      //   price: 100,
-    },
-    quantity: 0,
-    total: 0,
-  },
-];
+const initialCartItems = JSON.parse(sessionStorage.getItem("cart")) || [];
 
 export const CartApp = () => {
   const [cartItems, setCartItems] = useState(initialCartItems);
+
   const handleProductCard = (product) => {
     // console.log(product);
     const wishedItem = cartItems.find((i) => i.product.id === product.id);
+
     if (wishedItem) {
       //   setCartItems([
       //     ...cartItems.filter((i) => i.product.id !== product.id),

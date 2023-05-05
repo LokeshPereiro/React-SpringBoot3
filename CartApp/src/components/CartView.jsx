@@ -1,7 +1,16 @@
+import { useEffect, useState } from "react";
+import { calculateTotal } from "../services/productService";
 export const CartView = ({ handlerDelete, cartItems }) => {
+  const [total, setTotal] = useState(0);
+
+  useEffect(() => {
+    setTotal(calculateTotal(cartItems));
+    sessionStorage.setItem("cart", JSON.stringify(cartItems));
+  }, [cartItems]);
+
   return (
     <>
-      <h3>Carro de compras</h3>
+      <h3>Carrito de Compra</h3>
       <table className="table table-hover table-striped">
         <thead>
           <tr>
@@ -31,7 +40,7 @@ export const CartView = ({ handlerDelete, cartItems }) => {
               Total
             </td>
             <td colSpan="2" className="text-start fw-bold">
-              12345
+              {total}
             </td>
           </tr>
         </tfoot>

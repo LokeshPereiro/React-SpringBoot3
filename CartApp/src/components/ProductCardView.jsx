@@ -1,5 +1,3 @@
-import { products } from "../data/products";
-
 export const ProductCardView = ({ handler, id, name, description, price }) => {
   const onAddProduct = (product) => {
     // console.log(product);
@@ -16,7 +14,7 @@ export const ProductCardView = ({ handler, id, name, description, price }) => {
             onClick={() => onAddProduct({ id, name, description, price })}
             className="btn btn-primary"
           >
-            Agregar
+            Añadir
           </button>
         </div>
       </div>
