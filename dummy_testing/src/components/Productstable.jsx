@@ -1,15 +1,17 @@
 import PropTypes from "prop-types";
+import { ItemsTable } from "./ItemsTable";
 
 export const Productstable = ({ items }) => {
   return (
     <>
       {items.map(({ id, product, price, quantity }) => {
         return (
-          <tr key={id}>
-            <td>{product}</td>
-            <td>{price} €</td>
-            <td>{quantity}</td>
-          </tr>
+          <ItemsTable
+            key={id}
+            product={product}
+            price={price}
+            quantity={quantity}
+          />
         );
       })}
     </>

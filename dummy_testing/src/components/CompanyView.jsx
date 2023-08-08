@@ -1,7 +1,11 @@
 import PropTypes from "prop-types";
-export const CompanyView = ({ companyName, fiscalNumber }) => {
+export const CompanyView = ({ title, company }) => {
+  const { companyName, fiscalNumber } = company;
+
   return (
     <>
+      <h3>{title}</h3>
+
       <ul className="list-group mb-3">
         <li className="list-group-item">Nombre: {companyName}</li>
         <li className="list-group-item">Nº fiscal: {fiscalNumber}</li>
@@ -11,6 +15,6 @@ export const CompanyView = ({ companyName, fiscalNumber }) => {
 };
 
 CompanyView.propTypes = {
-  companyName: PropTypes.string,
-  fiscalNumber: PropTypes.number,
+  title: PropTypes.string.isRequired,
+  company: PropTypes.object,
 };
