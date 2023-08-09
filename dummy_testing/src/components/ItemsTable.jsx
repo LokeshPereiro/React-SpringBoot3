@@ -1,12 +1,26 @@
 import PropTypes from "prop-types";
 
-export const ItemsTable = ({ id, product, price, quantity }) => {
+export const ItemsTable = ({
+  id,
+  product,
+  price,
+  quantity,
+  handleDeleteItem,
+}) => {
   return (
     <>
-      <tr key={id}>
+      <tr>
         <td>{product}</td>
         <td>{price} €</td>
         <td>{quantity}</td>
+        <td>
+          <button
+            onClick={() => handleDeleteItem(id)}
+            className="btn btn-danger"
+          >
+            Eliminar
+          </button>
+        </td>
       </tr>
     </>
   );

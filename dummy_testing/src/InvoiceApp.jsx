@@ -1,50 +1,52 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { InvoiceRef } from "./components/InvoiceRef";
 import { ClientView } from "./components/ClientView";
 import { CompanyView } from "./components/CompanyView";
 import { Productstable } from "./components/Productstable";
 import { TotalView } from "./components/TotalView";
-import { getTotalInvoice } from "./services/getTotalInvoice";
+import { calculateTotal, getTotalInvoice } from "./services/getTotalInvoice";
+import { FormItemsView } from "./components/FormItemsView";
 
+//Estado inicial del Invoice sin datos pero respetando la estructura
+const initialInvoice = {
+  id: 0,
+  name: "",
+  client: {
+    firstName: "",
+    lastName: "",
+    address: {
+      country: "",
+      city: "",
+      street: "",
+    },
+  },
+  company: {
+    companyName: "",
+    fiscalNumber: 0,
+  },
+  items: [],
+};
 export const InvoiceApp = () => {
-  const {
-    total,
-    id,
-    name,
-    company,
-    client,
-    items: initialItems,
-  } = getTotalInvoice();
+  const [activeForm, setActiveForm] = useState(false);
 
-  const [invoiceState, setInvoiceState] = useState({
-    product: "",
-    price: "",
-    quantity: "",
-  });
-  const { product, price, quantity } = invoiceState;
-
-  //Mapeo previo + los nuevos objs
-  const [items, setItems] = useState(initialItems);
-
+  const [total, setTotal] = useState(0);
   const [counterId, setCounterid] = useState(7);
+  const [invoice, setInvoice] = useState(initialInvoice);
+  //Solo va a manejar los estodos de los items
+  const [items, setItems] = useState([]);
 
-  const onInputChange = ({ target: { name, value } }) => {
-    setInvoiceState({ ...invoiceState, [name]: value });
-  };
+  const { id, name, company, client } = invoice;
 
-  const handleSubmit = (evt) => {
-    evt.preventDefault();
-    //validaciones
-    if (
-      product.trim().length <= 3 ||
-      price.trim().length < 1 ||
-      price <= 0 ||
-      quantity.trim().length < 1 ||
-      quantity <= 0
-    )
-      return;
-    if (isNaN(price.trim() || quantity.trim())) return;
+  useEffect(() => {
+    const data = getTotalInvoice();
+    setInvoice(data);
+    // console.log(data);
 
+    setItems(data.items);
+    // console.log(items);
+  }, []);
+
+  const handlerInvoiceItems = ({ product, price, quantity }) => {
     setItems([
       ...items,
       {
@@ -56,15 +58,21 @@ export const InvoiceApp = () => {
         quantity: parseInt(quantity, 10),
       },
     ]);
-    //Vaciar despues del submit
-    setInvoiceState({
-      product: "",
-      price: "",
-      quantity: "",
-    });
 
     setCounterid(counterId + 1);
   };
+
+  const handleDeleteItem = (id) => {
+    setItems(items.filter((item) => item.id !== id));
+  };
+
+  const onActiveForm = () => {
+    setActiveForm(!activeForm);
+  };
+
+  useEffect(() => {
+    setTotal(calculateTotal(items));
+  }, [items]);
 
   return (
     <div className="container">
@@ -99,45 +107,23 @@ export const InvoiceApp = () => {
                   <th>Producto</th>
                   <th>Precio</th>
                   <th>Cantidad</th>
+                  <th>Eliminar</th>
                 </tr>
               </thead>
               <tbody>
-                <Productstable items={items} />
+                <Productstable
+                  items={items}
+                  handleDeleteItem={(id) => handleDeleteItem(id)}
+                />
               </tbody>
             </table>
 
             {/* Total  */}
             <TotalView total={total} />
-
-            <form className="mt-3" onSubmit={handleSubmit}>
-              <input
-                className="form-control mb-3"
-                type="text"
-                name="product"
-                value={product}
-                placeholder="Nombre del Producto"
-                onChange={onInputChange}
-              />
-              <input
-                className="form-control mb-3"
-                type="number"
-                name="price"
-                value={price}
-                placeholder="Precio.."
-                onChange={onInputChange}
-              />
-              <input
-                className="form-control mb-3"
-                type="number"
-                name="quantity"
-                value={quantity}
-                placeholder="Cantidad.."
-                onChange={onInputChange}
-              />
-              <button type="submit" className="btn btn-secondary">
-                Añadir Item
-              </button>
-            </form>
+            <button onClick={onActiveForm} className="mt-2 bg-warning">
+              {!activeForm ? "Mostrar Form" : "Ocultar"}
+            </button>
+            {!activeForm || <FormItemsView handler={handlerInvoiceItems} />}
           </div>
         </div>
       </div>
