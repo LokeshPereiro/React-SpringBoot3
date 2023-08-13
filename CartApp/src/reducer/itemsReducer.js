@@ -1,6 +1,8 @@
+import { Add_Items, Update_Items, Delete_Items } from "./itemsActions";
+
 export const itemsReducer = (state = [], action) => {
   switch (action.type) {
-    case "Add Items":
+    case Add_Items:
       return [
         ...state,
         {
@@ -8,7 +10,7 @@ export const itemsReducer = (state = [], action) => {
           quantity: 1,
         },
       ];
-    case "Update Items":
+    case Update_Items:
       return state.map((i) => {
         if (i.product.id === action.payload.id) {
           // i.quantity++;
@@ -19,7 +21,7 @@ export const itemsReducer = (state = [], action) => {
         }
         return i;
       });
-    case "Delete Items":
+    case Delete_Items:
       return state.filter((i) => i.product.id !== action.payload);
 
     default:
