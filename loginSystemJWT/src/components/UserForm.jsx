@@ -1,8 +1,14 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import Swal from "sweetalert2";
 
-export const UserForm = ({ handleAddNewUsers, initialEmptyFields }) => {
+export const UserForm = ({
+  handleAddNewUsers,
+  initialEmptyFields,
+  selectedUser,
+  handleCloseForm,
+}) => {
   const [userForm, setUserForm] = useState(initialEmptyFields);
-  const { username, password, email } = userForm;
+  const { id, username, password, email } = userForm;
 
   const onInputChange = ({ target }) => {
     // console.log(target.value);
@@ -14,13 +20,30 @@ export const UserForm = ({ handleAddNewUsers, initialEmptyFields }) => {
   };
   const onSubmitForm = (evt) => {
     evt.preventDefault();
-    if (!username || !password || !email) {
-      alert("Campos Vacíos!!");
+    if (!username || (!password && id === 0) || !email) {
+      Swal.fire({
+        position: "top-center",
+        icon: "error",
+        title: "Rellena todos los campos!",
+        showConfirmButton: false,
+        timer: 1500,
+      });
       return;
     }
     handleAddNewUsers(userForm);
     setUserForm(initialEmptyFields);
   };
+  // const onCloseForm = () => {
+  //   handleCloseForm();
+  //   setUserForm(initialEmptyFields);
+  // };
+  useEffect(() => {
+    setUserForm({
+      ...selectedUser,
+      // password: ""
+    });
+  }, [selectedUser]);
+
   return (
     <form onSubmit={onSubmitForm}>
       <input
@@ -30,14 +53,18 @@ export const UserForm = ({ handleAddNewUsers, initialEmptyFields }) => {
         value={username}
         onChange={onInputChange}
       />
-      <input
-        className="form-control my-3 w-7"
-        placeholder="Contraseña**"
-        type="password"
-        name="password"
-        value={password}
-        onChange={onInputChange}
-      />
+
+      {id > 0 || (
+        <input
+          className="form-control my-3 w-7"
+          placeholder="Contraseña**"
+          type="password"
+          name="password"
+          value={password}
+          onChange={onInputChange}
+        />
+      )}
+
       <input
         className="form-control my-3 w-7"
         placeholder="Tu corre@"
@@ -46,8 +73,13 @@ export const UserForm = ({ handleAddNewUsers, initialEmptyFields }) => {
         value={email}
         onChange={onInputChange}
       />
+      <input type="hidden" name="id" value={id} />
+
       <button type="submit" className="btn btn-success">
-        Añadir
+        {id > 0 ? "Actualizar" : "Añadir"}
+      </button>
+      <button className="btn btn-secondary mx-2" onClick={handleCloseForm}>
+        Cerrar
       </button>
     </form>
   );

@@ -1,7 +1,10 @@
-import { useTransition } from "react";
 import { UserRow } from "./UserRow";
 
-export const UsersList = ({ users = [], handleDeleteUsers }) => {
+export const UsersList = ({
+  users = [],
+  handleDeleteUsers,
+  handleSelectedUserForm,
+}) => {
   return (
     <div>
       <h4>Lista de Usuarios</h4>
@@ -21,6 +24,7 @@ export const UsersList = ({ users = [], handleDeleteUsers }) => {
               key={user.id}
               user={user}
               handleDeleteUsers={handleDeleteUsers}
+              handleSelectedUserForm={handleSelectedUserForm}
             />
           ))}
         </tbody>
