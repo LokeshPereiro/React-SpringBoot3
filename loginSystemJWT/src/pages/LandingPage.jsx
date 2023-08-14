@@ -1,8 +1,8 @@
-import { UserModalForm } from "./components/UserModalForm";
-import { UsersList } from "./components/UsersList";
-import { useUsersData } from "./hooks/useUsersData";
+import { UserModalForm } from "../components/UserModalForm";
+import { UsersList } from "../components/UsersList";
+import { useUsersData } from "../hooks/useUsersData";
 
-function LoginSystemApp() {
+export const LandingPage = () => {
   const {
     users,
     selectedUser,
@@ -62,6 +62,4 @@ function LoginSystemApp() {
       </div>
     </>
   );
-}
-
-export default LoginSystemApp;
+};
