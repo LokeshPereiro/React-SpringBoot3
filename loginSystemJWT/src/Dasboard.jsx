@@ -1,22 +1,27 @@
+import { Navigate, Route, Routes } from "react-router-dom";
 import { LoginPage } from "./auth/pages/LoginPage";
-import { LandingPage } from "./pages/LandingPage";
-import { Navbar } from "./auth/components/Navbar";
 import { useLoginAuth } from "./auth/hooks/useLoginAuth";
-// import { LandingPage } from "./pages/LandingPage";
+import { UserRoutes } from "./routes/UserRoutes";
 
 export const Dasboard = () => {
   const { login, handleLogin, handleLogOut } = useLoginAuth();
 
   return (
-    <>
+    <Routes>
       {login.isAuth ? (
-        <>
-          <Navbar login={login} handleLogOut={handleLogOut} />
-          <LandingPage />
-        </>
+        <Route
+          path="/*"
+          element={<UserRoutes login={login} handleLogOut={handleLogOut} />}
+        />
       ) : (
-        <LoginPage handleLogin={handleLogin} />
+        <>
+          <Route
+            path="/login"
+            element={<LoginPage handleLogin={handleLogin} />}
+          />
+          <Route path="/*" element={<Navigate to="/login" />} />
+        </>
       )}
-    </>
+    </Routes>
   );
 };

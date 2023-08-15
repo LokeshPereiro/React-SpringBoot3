@@ -1,20 +1,17 @@
 import { UserModalForm } from "../components/UserModalForm";
 import { UsersList } from "../components/UsersList";
-import { useUsersData } from "../hooks/useUsersData";
 
-export const LandingPage = () => {
-  const {
-    users,
-    selectedUser,
-    initialEmptyFields,
-    showFormulario,
-    handleAddNewUsers,
-    handleDeleteUsers,
-    handleSelectedUserForm,
-    handleOpenForm,
-    handleCloseForm,
-  } = useUsersData();
-
+export const LandingPage = ({
+  users,
+  selectedUser,
+  initialEmptyFields,
+  showFormulario,
+  handleAddNewUsers,
+  handleDeleteUsers,
+  handleSelectedUserForm,
+  handleOpenForm,
+  handleCloseForm,
+}) => {
   return (
     <>
       <div className="container my-4">
@@ -29,17 +26,6 @@ export const LandingPage = () => {
             />
           )}
 
-          {/* {!showFormulario || (
-            <div className="col">
-              <UserForm
-                selectedUser={selectedUser}
-                initialEmptyFields={initialEmptyFields}
-                handleAddNewUsers={handleAddNewUsers}
-                handleCloseForm={handleCloseForm}
-              />
-            </div>
-          )} */}
-
           <div className="col">
             {/* <UsersList users={initialUsers} /> */}
             {showFormulario || (
@@ -48,7 +34,7 @@ export const LandingPage = () => {
               </button>
             )}
 
-            {users.length === 0 ? (
+            {users?.length === 0 ? (
               <div className="alert alert-danger">No hay usuarios..</div>
             ) : (
               <UsersList

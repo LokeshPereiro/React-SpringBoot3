@@ -33,10 +33,10 @@ export const UserForm = ({
     handleAddNewUsers(userForm);
     setUserForm(initialEmptyFields);
   };
-  // const onCloseForm = () => {
-  //   handleCloseForm();
-  //   setUserForm(initialEmptyFields);
-  // };
+  const onCloseForm = () => {
+    handleCloseForm();
+    setUserForm(initialEmptyFields);
+  };
   useEffect(() => {
     setUserForm({
       ...selectedUser,
@@ -78,9 +78,12 @@ export const UserForm = ({
       <button type="submit" className="btn btn-success">
         {id > 0 ? "Actualizar" : "Añadir"}
       </button>
-      <button className="btn btn-secondary mx-2" onClick={handleCloseForm}>
-        Cerrar
-      </button>
+
+      {!handleCloseForm || (
+        <button className="btn btn-secondary mx-2" onClick={onCloseForm}>
+          Cerrar
+        </button>
+      )}
     </form>
   );
 };
