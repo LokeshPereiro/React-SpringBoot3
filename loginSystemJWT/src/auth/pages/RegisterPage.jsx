@@ -13,13 +13,16 @@ export const RegisterPage = ({
 
   useEffect(() => {
     // console.log(id);
-    const user = users.find((u) => u.id == id) || initialEmptyFields;
-    setSelectedUser(user);
+    if (id) {
+      const user = users.find((u) => u.id == id) || initialEmptyFields;
+      setSelectedUser(user);
+    }
   }, [id]);
 
   return (
     <div className="container my-4">
-      <h4>Register Page</h4>
+      <h4>{selectedUser.id > 0 ? "Editar Usuario" : "Registrar Usuario"}</h4>
+
       <div className="row">
         <div className="col">
           <UserForm
