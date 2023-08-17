@@ -1,15 +1,9 @@
 import { useReducer, useState } from "react";
 import { usersReducer } from "../reducers/usersReducer";
 import Swal from "sweetalert2";
+import { findAll, remove, save, update } from "../services/userService";
 
-const initialUsers = [
-  {
-    id: 1,
-    username: "Pocholo",
-    password: "2344",
-    email: "pocholo@correo.com",
-  },
-];
+const initialUsers = [];
 const initialEmptyFields = {
   id: 0,
   username: "",
@@ -21,14 +15,31 @@ export const useUsersData = () => {
   const [selectedUser, setSelectedUser] = useState(initialEmptyFields);
   const [showFormulario, setShowFormulario] = useState(false);
 
-  const handleAddNewUsers = (newUser) => {
+  const getUsers = async () => {
+    const result = await findAll();
+    // console.log(result);
+    dispatchUsers({
+      type: "Loading_Users",
+      payload: result.data,
+    });
+  };
+
+  const handleAddNewUsers = async (newUser) => {
     // console.log(newUser);
     //Iniciamos el id en 0 si no se nos crearía el obj duplicado con info actualizado en vez de actualizar el mismo obj
     // let type = newUser.id === 0 ? ("Add_User") : ("Update_User");
 
+    let response;
+
+    if (newUser.id === 0) {
+      response = await save(newUser);
+    } else {
+      response = await update(newUser);
+    }
+
     dispatchUsers({
       type: newUser.id === 0 ? "Add_User" : "Update_User",
-      payload: newUser,
+      payload: response.data,
     });
     Swal.fire(
       newUser.id === 0 ? "Nuevo Usuario" : "Actualizar Usuario",
@@ -56,6 +67,7 @@ export const useUsersData = () => {
       });
 
       if (result.isConfirmed) {
+        remove(id);
         Swal.fire(
           "Usuario Eliminado",
           "Se eliminó al usuario con éxito",
@@ -88,5 +100,6 @@ export const useUsersData = () => {
     handleSelectedUserForm,
     handleOpenForm,
     handleCloseForm,
+    getUsers,
   };
 };

@@ -5,7 +5,8 @@ export const usersReducer = (state = [], action) => {
         ...state,
         {
           ...action.payload,
-          id: new Date().getTime(),
+          //Ya viene del db
+          // id: new Date().getTime(),
         },
       ];
 
@@ -19,6 +20,9 @@ export const usersReducer = (state = [], action) => {
 
     case "Delete_User":
       return state.filter((user) => user.id !== action.payload);
+
+    case "Loading_Users":
+      return action.payload;
 
     default:
       return state;
