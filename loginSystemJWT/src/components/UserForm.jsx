@@ -18,16 +18,16 @@ export const UserForm = ({ selectedUser, handleCloseForm }) => {
   };
   const onSubmitForm = (evt) => {
     evt.preventDefault();
-    if (!username || (!password && id === 0) || !email) {
-      Swal.fire({
-        position: "top-center",
-        icon: "error",
-        title: "Rellena todos los campos!",
-        showConfirmButton: false,
-        timer: 1500,
-      });
-      return;
-    }
+    // if (!username || (!password && id === 0) || !email) {
+    //   Swal.fire({
+    //     position: "top-center",
+    //     icon: "error",
+    //     title: "Rellena todos los campos!",
+    //     showConfirmButton: false,
+    //     timer: 1500,
+    //   });
+    //   return;
+    // }
 
     handleAddNewUsers(userForm);
     setUserForm(initialEmptyFields);

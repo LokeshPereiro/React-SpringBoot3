@@ -10,10 +10,16 @@ const initialEmptyFields = {
   password: "",
   email: "",
 };
+const initialErrors = {
+  username: "",
+  password: "",
+  email: "",
+};
 export const useUsersData = () => {
   const [users, dispatchUsers] = useReducer(usersReducer, initialUsers);
   const [selectedUser, setSelectedUser] = useState(initialEmptyFields);
   const [showFormulario, setShowFormulario] = useState(false);
+  const [errors, setErrors] = useState(initialErrors);
 
   const getUsers = async () => {
     const result = await findAll();
@@ -31,24 +37,31 @@ export const useUsersData = () => {
 
     let response;
 
-    if (newUser.id === 0) {
-      response = await save(newUser);
-    } else {
-      response = await update(newUser);
-    }
+    try {
+      if (newUser.id === 0) {
+        response = await save(newUser);
+      } else {
+        response = await update(newUser);
+      }
 
-    dispatchUsers({
-      type: newUser.id === 0 ? "Add_User" : "Update_User",
-      payload: response.data,
-    });
-    Swal.fire(
-      newUser.id === 0 ? "Nuevo Usuario" : "Actualizar Usuario",
-      newUser.id === 0
-        ? "Usuario registrado con éxito!"
-        : "Usuario actualizado con éxito!",
-      "success"
-    );
-    handleCloseForm();
+      dispatchUsers({
+        type: newUser.id === 0 ? "Add_User" : "Update_User",
+        payload: response.data,
+      });
+      Swal.fire(
+        newUser.id === 0 ? "Nuevo Usuario" : "Actualizar Usuario",
+        newUser.id === 0
+          ? "Usuario registrado con éxito!"
+          : "Usuario actualizado con éxito!",
+        "success"
+      );
+      handleCloseForm();
+    } catch (error) {
+      // setErrors(error);
+      if (error.response && error.response.status == 400) {
+        console.log(error.response.data);
+      }
+    }
   };
 
   const handleDeleteUsers = (id) => {
@@ -95,6 +108,7 @@ export const useUsersData = () => {
     selectedUser,
     initialEmptyFields,
     showFormulario,
+    errors,
     handleAddNewUsers,
     handleDeleteUsers,
     handleSelectedUserForm,
